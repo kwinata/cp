@@ -276,7 +276,48 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	vi arr = readIntArr();
+	int n = arr.size();
+	int FAILED = -1;
+	int FIRST_FOUND = 0;
+	int FOUND_DIST = 1;
+	map<int, int> status;
+	map<int, int> dists;
+	F0R(i, n) {
+		int c = arr[i];
+		
+		if (status.count(c)) {
+			if (status[c] == FAILED) continue;
+			if (status[c] == FIRST_FOUND) {
+				int dist = i - dists[c];
+				dists[c] = dist; // on first found, we borrow dists to store prev loc
+				status[c] = FOUND_DIST;
+				continue;
+			}
+			if (status[c] == FOUND_DIST) {
+				int prev_loc = i - dists[c];
+				if (prev_loc >= 0 && arr[prev_loc] != c) {
+					status[c] = FAILED;
+				}
+				continue;
+			}
+		} else {
+			status[c] = FIRST_FOUND;
+			dists[c] = i;
+		}
+	}
+	int count_succ = 0;
+	for(auto p: status) {
+		count_succ += p.s != FAILED;
+	}
+	ps(count_succ);
+	for(auto p : status) {
+		int c = p.f;
+		int stat = p.s;
+		if (stat == FAILED) continue;
+		if (stat == FIRST_FOUND) ps(c, 0);
+		if (stat == FOUND_DIST) ps(c, dists[c]);
+	}
 	// you should actually read the stuff at the bottom
 }
 

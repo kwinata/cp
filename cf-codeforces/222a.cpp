@@ -276,7 +276,27 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	int n, k; re(n, k);
+	vi arr;
+	F0R(i, n) {
+		int tmp; re(tmp); arr.pb(tmp);
+	}
+	set<int> group;
+	FOR(i, k-1, n) {
+		group.insert(arr[i]);
+	}
+	if(group.size() > 1) {
+		ps(-1);
+		return 0;
+	}
+	int last_not_same = 0;
+	int to_match = arr[k-1];
+	F0R(i, k) {
+		if (arr[i] != to_match) {
+			last_not_same = i+1;
+		}
+	}
+	ps(last_not_same);
 	// you should actually read the stuff at the bottom
 }
 

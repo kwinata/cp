@@ -265,9 +265,26 @@ ll maxll(ll a, ll b) {
 	}
 }
 
+int reduce_range(vector<pl> arr, int k) {
+
+}
+
+void solve() {
+	int n; re(n);
+	str s; re(s);
+	int c; re(c);
+	vector<pl> arr;
+	F0R(i, n) {
+		ll ()
+	}
+}
+
 int main() {
 	setIO();
 	int t; re(t);
+	F0R(i, t) {
+		solve();
+	}
 	
 	// you should actually read the stuff at the bottom
 }

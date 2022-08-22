@@ -265,18 +265,45 @@ ll maxll(ll a, ll b) {
 	}
 }
 
-vi readIntArr() {
-	int n; re(n);
-	vi arr;
-	F0R(i, n) {
-		int tmp; re(tmp); arr.pb(tmp);
-	}
-	return arr;
-}
-
 int main() {
 	setIO();
-	
+	int n, m; re(n, m);
+	set<pi> goods;
+	vector<str> arr;
+	F0R(i, n) {
+		str s; re(s);
+		arr.pb(s);
+		F0R(j, m) {
+			if(s[j] == '.') goods.insert(mp(i, j));
+		}
+	}
+	while(goods.size()) {
+		pi root = *goods.begin();
+		goods.erase(goods.begin());
+		vector<pair<pi, char>> tovisit;
+		tovisit.pb(mp(root, 'B'));
+		while (tovisit.size()) {
+			pair<pi, char> cur = tovisit.back(); tovisit.pop_back();
+			arr[cur.f.f][cur.f.s] = cur.s; 
+			char next_color = cur.s == 'B' ? 'W' : 'B';
+			goods.erase(cur.f);
+			if(cur.f.f-1 >= 0 && arr[cur.f.f-1][cur.f.s] == '.') {
+				tovisit.pb(mp(mp(cur.f.f-1, cur.f.s), next_color));
+			}
+			if(cur.f.f+1 < n && arr[cur.f.f+1][cur.f.s] == '.') {
+				tovisit.pb(mp(mp(cur.f.f+1, cur.f.s), next_color));
+			}
+			if(cur.f.s-1 >= 0 && arr[cur.f.f][cur.f.s-1] == '.') {
+				tovisit.pb(mp(mp(cur.f.f, cur.f.s-1), next_color));
+			}
+			if(cur.f.s+1 < m && arr[cur.f.f][cur.f.s+1] == '.') {
+				tovisit.pb(mp(mp(cur.f.f, cur.f.s+1), next_color));
+			}
+		}
+	}
+	F0R(i, n) {
+		ps(arr[i]);
+	}
 	// you should actually read the stuff at the bottom
 }
 

@@ -246,14 +246,11 @@ inline namespace Output {
 }
 
 inline namespace FileIO {
-	void setIn(str s)  { freopen(s.c_str(),"r",stdin); }
-	void setOut(str s) { freopen(s.c_str(),"w",stdout); }
-	void setIO(str s = "") {
+	void setIO() {
 		cin.tie(0)->sync_with_stdio(0); // unsync C / C++ I/O streams
 		// cin.exceptions(cin.failbit);
 		// throws exception when do smth illegal
 		// ex. try to read letter into int
-		if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for old USACO
 	}
 }
 
@@ -274,9 +271,35 @@ vi readIntArr() {
 	return arr;
 }
 
+char arr[500][500];
 int main() {
 	setIO();
-	
+	int h, w; re(h, w);
+	F0R(i, h) {
+		F0R(j, w) {
+			char c; re(c);
+			arr[i][j] = c;
+		}
+	}
+	int x = 0, y = 0;
+	set<pair<int, int>> visited;
+	while(visited.count(mp(x, y)) == 0) {
+		char dir = arr[x][y];
+		visited.insert(mp(x, y));
+		if (dir == 'U' && x > 0) {
+			x--;
+		} else if (dir == 'D' && x < h-1) {
+			x++;
+		} else if (dir == 'L' && y > 0) {
+			y--;
+		} else if (dir == 'R' && y < w-1) {
+			y++;
+		} else {
+			ps(x+1, y+1); return 0;
+		}
+
+	}
+	ps(-1);
 	// you should actually read the stuff at the bottom
 }
 

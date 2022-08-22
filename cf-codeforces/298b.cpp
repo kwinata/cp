@@ -276,7 +276,38 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	int t, sx, sy, ex, ey; re(t, sx, sy, ex, ey);
+	str s; re(s);
+	int count_e = max(0, ex-sx);
+	int count_w = max(0, -(ex-sx));
+	int count_n = max(0, ey-sy);
+	int count_s = max(0, -(ey-sy));
+	F0R(i, t) {
+		if (count_e + count_w + count_n + count_s == 0) {
+			ps(i);
+			return 0;
+		}
+		switch (s[i]) {
+			case 'E':
+				if(count_e) count_e--;
+				break;
+			case 'W':
+				if(count_w) count_w--;
+				break;
+			case 'N':
+				if(count_n) count_n--;
+				break;
+			case 'S':
+				if(count_s) count_s--;
+				break;
+		}
+
+	}
+	if (count_e + count_w + count_n + count_s == 0) {
+		ps(t); return 0;
+	} else {
+		ps(-1);
+	}
 	// you should actually read the stuff at the bottom
 }
 

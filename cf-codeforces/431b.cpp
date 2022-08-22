@@ -274,9 +274,31 @@ vi readIntArr() {
 	return arr;
 }
 
+int arr[5][5];
 int main() {
 	setIO();
-	
+	F0R(i, 5) F0R(j, 5) {
+		int tmp; re(tmp);
+		arr[i][j] = tmp;
+	}
+	int max_hap = -1;
+	F0R(p1, 5) F0R(p2, 5) F0R(p3, 5) F0R(p4, 5) F0R(p5, 5) {
+		set<int> group = {p1, p2, p3, p4, p5};
+		if (group.size() < 5) {
+			continue;
+		}
+		vi order = {p1, p2, p3, p4, p5};
+		int hap = 0;
+
+		F0R(i, 5) {
+			for(int j = i; j < 5-1; j+=2) {
+				hap += arr[order[j]][order[j+1]];
+				hap += arr[order[j+1]][order[j]];
+			}
+		}
+		max_hap = max(max_hap, hap);
+	}
+	ps(max_hap);
 	// you should actually read the stuff at the bottom
 }
 

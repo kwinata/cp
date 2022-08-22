@@ -265,18 +265,31 @@ ll maxll(ll a, ll b) {
 	}
 }
 
-vi readIntArr() {
-	int n; re(n);
+int main() {
+	setIO();
+	ll n; re(n);
 	vi arr;
 	F0R(i, n) {
 		int tmp; re(tmp); arr.pb(tmp);
 	}
-	return arr;
-}
-
-int main() {
-	setIO();
-	
+	sor(arr);
+	int min_val = arr[0];
+	int max_val = arr.back();
+	if(min_val == max_val) {
+		ps(0, n * (n-1) / 2);
+		return 0;
+	}
+	ll count_min = 0;
+	ll count_max = 0;
+	F0R(i, n) {
+		if(arr[i] == min_val) count_min++;
+		else break;
+	}
+	R0F(i, n) {
+		if(arr[i] == max_val) count_max++;
+		else break;
+	}
+	ps(max_val-min_val, count_min * count_max);
 	// you should actually read the stuff at the bottom
 }
 

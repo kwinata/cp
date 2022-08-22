@@ -246,14 +246,11 @@ inline namespace Output {
 }
 
 inline namespace FileIO {
-	void setIn(str s)  { freopen(s.c_str(),"r",stdin); }
-	void setOut(str s) { freopen(s.c_str(),"w",stdout); }
-	void setIO(str s = "") {
+	void setIO() {
 		cin.tie(0)->sync_with_stdio(0); // unsync C / C++ I/O streams
 		// cin.exceptions(cin.failbit);
 		// throws exception when do smth illegal
 		// ex. try to read letter into int
-		if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for old USACO
 	}
 }
 
@@ -274,9 +271,51 @@ vi readIntArr() {
 	return arr;
 }
 
+
 int main() {
 	setIO();
-	
+
+	map<ll, map<pl, ll>> f_cache;
+	ll A, B, C, D, E, F;
+	ll n, m; re(n, m);
+	re(A, B, C, D, E, F);
+	ll xoffset[3] = {A, C, E};
+	ll yoffset[3] = {B, D, F};
+
+	vector<pl> obs_arr;
+	F0R(i, m) {
+		ll x, y; re(x, y); obs_arr.pb(mp(x, y));
+	}
+	set<pl> obs(all(obs_arr));
+	map<pl, ll> prev;
+	prev[mp(0, 0)] = 1;
+	FOR(i, 1, n+1) {
+		map<pl, ll> next;
+		for (auto paths: prev) {
+			ll x = paths.f.f;
+			ll y = paths.f.s;
+
+			F0R(j, 3) {
+				pl target = mp(x+xoffset[j], y+yoffset[j]);
+				if (obs.count(target)) {
+					continue;
+				}
+				if (next.count(target)) {
+					next[target] += paths.s;
+					next[target] %= 998244353;
+				} else {
+					next[target] = paths.s;
+				}
+			}
+		}
+		prev = next;
+	}
+	ll total_paths = 0;
+	for (auto paths: prev) {
+		total_paths += paths.s;
+		total_paths %= 998244353;
+	}
+	ps(total_paths);
 	// you should actually read the stuff at the bottom
 }
 

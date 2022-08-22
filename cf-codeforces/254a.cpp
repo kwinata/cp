@@ -275,8 +275,23 @@ vi readIntArr() {
 }
 
 int main() {
-	setIO();
-	
+	setIn("input.txt"); setOut("output.txt");
+	int n; re(n);
+	vector<pi> arr;
+	F0R(i, n*2) {
+		int tmp; re(tmp); arr.pb(mp(tmp, i+1));
+	}
+	sor(arr);
+	vector<pi> indices;
+	for(int i = 0; i < n*2; i+=2) {
+		if(arr[i].f != arr[i+1].f) {
+			ps(-1); return 0;
+		}
+		indices.pb(mp(arr[i].s, arr[i+1].s));
+	}
+	F0R(i, n) {
+		ps(indices[i].f, indices[i].s);
+	}
 	// you should actually read the stuff at the bottom
 }
 

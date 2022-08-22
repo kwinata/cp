@@ -276,7 +276,43 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	int n; re(n);
+	map<int, int> count;
+	count[1] = 0;
+	count[2] = 0;
+	count[3] = 0;
+	count[4] = 0;
+	count[6] = 0;
+	F0R(i, n) {
+		int tmp; re(tmp); 
+		if (tmp == 5 || tmp == 7) {
+			ps(-1); return 0;
+		}
+		count[tmp]++;
+	}
+	int p124 = count[4];
+	count[1] -= p124;
+	count[2] -= p124;
+	int p136 = count[3];
+	count[1] -= p136;
+	count[6] -= p136;
+
+	if (count[1] < 0 || count[2] < 0 || count[6] < 0) {
+		ps(-1); return 0;
+	}
+	if (!(count[1] == count[2] && count[1] == count[6])) {
+		ps(-1); return 0;
+	}
+	int p126 = count[1];
+	F0R(i, p126) {
+		ps(1, 2, 6);
+	}
+	F0R(i, p124) {
+		ps(1, 2, 4);
+	}
+	F0R(i, p136) {
+		ps(1, 3, 6);
+	}
 	// you should actually read the stuff at the bottom
 }
 

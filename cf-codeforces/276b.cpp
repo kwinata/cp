@@ -276,7 +276,20 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	str s; re(s);
+	map<char, bool> is_odd;
+	for(auto c: s) {
+		if (is_odd.count(c)) is_odd[c] ^= true;
+		else is_odd[c] = true;
+	}
+	int count_odd = 0;
+	for (auto p: is_odd) {
+		count_odd += p.s;
+	}
+	if (count_odd == 0) {
+		ps("First");
+	}
+	else ps(count_odd % 2 ? "First" : "Second");
 	// you should actually read the stuff at the bottom
 }
 
