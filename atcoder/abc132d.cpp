@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -274,9 +271,35 @@ vi readIntArr() {
 	return arr;
 }
 
+
+ll powmod(ll base, ll pow) {
+	if (pow == 0) return 1;
+	if (pow == 1) return base;
+	ll val = base;
+	while (pow > 1) {
+		val *= val;
+		val %= MOD;
+		if (pow % 2) {
+			val *= base;
+			val %= MOD;
+		}
+		pow /= 2;
+	}
+	return val;
+}
+
 int main() {
 	setIO();
-	
+	int n, k; re(n, k);
+	assert(powmod(2, 13) == 8192);
+	FOR(i, 1, k+1) {
+		// how many ways to partition red?
+		// r r r r r r r (7 rs)
+		//  | | | | | |
+		// we want to partition to 3, so we need to choose exactly 2, that is, 7*6/2
+
+		// 
+	}
 	// you should actually read the stuff at the bottom
 }
 

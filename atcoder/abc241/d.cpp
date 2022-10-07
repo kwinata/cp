@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,9 +273,97 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	int q; re(q);
+	multiset<ll> s;
+	multiset<ll> s_neg;
+	F0R(i, q) {
+		int command, k; ll x;
+		k = 0;
+		re(command, x);
+
+		if (command != 1) {
+			re(k);
+		}
+
+		// ps(s);
+		// ps(command, x, k);
+
+		if (command == 1) {
+			s.insert(x);
+			s_neg.insert(-x);
+		}
+		if (command == 2) {
+			auto search = s_neg.lower_bound(-x);
+			bool fail = false;
+			k--;
+			F0R(j, k) {
+				if (search == s_neg.end()){
+					fail = true;
+					break;
+				} else {
+					search++;
+				}
+			}
+			if (search == s_neg.end()){
+				fail = true;
+			}
+			if (fail) {
+				ps(-1);
+			} else {
+				ps(-(*search));
+			}
+		}
+		
+		if (command == 3) {
+			auto search = s.lower_bound(x);
+			bool fail = false;
+			k--;
+			F0R(j, k) {
+				if (search == s.end()){
+					fail = true;
+					break;
+				} else {
+					search++;
+				}
+			}
+			if (search == s.end()){
+				fail = true;
+			}
+			if (fail) {
+				ps(-1);
+			} else {
+				ps(*search);
+			}
+		}
+	}
 	// you should actually read the stuff at the bottom
 }
+
+/*
+
+In:
+11
+1 20
+1 10
+1 30
+1 20
+3 15 1
+3 15 2
+3 15 3
+3 15 4
+2 100 5
+1 1
+2 100 5
+
+Out:
+20
+20
+30
+-1
+-1
+1
+
+*/
 
 /* stuff you should look for
 	* int overflow, array bounds

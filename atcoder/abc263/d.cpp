@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,7 +273,43 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	ll n, l, r; re(n, l, r);
+	vl arr(n);
+
+	F0R(i, n) {
+		ll tmp; re(tmp); arr[i] = tmp;
+	}
+
+	vl left_sum(n);
+	ll left_tot = 0;
+	ll max_reduce = 0;
+	F0R(i, n) {
+		ll l_sum = l*(i+1);
+		left_tot += arr[i];
+		max_reduce = max(max_reduce, left_tot - l_sum);
+		left_sum[i] = min(left_tot, left_tot-max_reduce);
+	}
+
+	vl right_sum(n);
+	ll right_tot = 0;
+	max_reduce = 0;
+	F0R(j, n) {
+		ll i = n-j-1;
+		ll r_sum = r*(j+1);
+		right_tot += arr[i];
+		max_reduce = max(max_reduce, right_tot - r_sum);
+		right_sum[i] = min(right_tot, right_tot - max_reduce);
+
+	}
+
+
+	ll best_sum = min(right_sum[0], left_sum[n-1]);
+	F0R(i,n-1) {
+		best_sum = min(best_sum, left_sum[i] + right_sum[i+1]);
+	}
+
+	ps(best_sum);
+
 	// you should actually read the stuff at the bottom
 }
 

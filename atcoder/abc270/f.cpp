@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
+#include <atcoder/dsu>
 using namespace std;
 using namespace atcoder;
  
@@ -274,9 +273,92 @@ vi readIntArr() {
 	return arr;
 }
 
+ll find_set(vector<ll>& parent, ll v) {
+	if (v == parent[v])
+		return v;
+	return parent[v] = find_set(parent, parent[v]);
+}
+
+void union_sets(vector<ll>& parent, ll a, ll b) {
+	a = find_set(parent, a);
+	b = find_set(parent, b);
+	if (a != b)
+		parent[b] = a;
+}
+
 int main() {
 	setIO();
-	
+	ll n, m; re(n, m);
+	vector<ll> airports(n);
+	vector<ll> harbors(n);
+	F0R(i, n) {
+		ll tmp; re(tmp); airports[i] = tmp;
+	}
+	F0R(i, n) {
+		ll tmp; re(tmp); harbors[i] = tmp;
+	}
+	vector<pair<ll, pl>> roads(m);
+	F0R(i, m) {
+		ll a, b, z; re(a, b, z);
+		roads[i] = mp(z, mp(--a, --b));
+	}
+	// ps(airports);
+	// ps(harbors);
+	// ps(roads);
+
+	ll min_cost = ll(1e17);
+	F0R(k, 4) {
+		ll members = n;
+		ll edges_count = m + n*((k&1) == 1) + n*((k&2) == 2);
+		vector<pair<ll, pl>> edges(edges_count);
+		
+		ll cur = 0;
+		F0R(i, m) {
+			edges[i] = roads[i];
+		}
+		cur += m;
+
+		if (k & 1) {
+			F0R(i, n) {
+				edges[i+cur] = mp(airports[i], mp(i, n));
+			}
+			cur += n;
+			members++;
+		}
+		if (k & 2) {
+			F0R(i, n) {
+				edges[i+cur] = mp(harbors[i], mp(i, n+1*((k&1) == 1)));
+			}
+			members++;
+		}
+
+		// ps(k, edges);
+
+		dsu d(members);
+
+		sor(edges);
+		ll step = 0;
+		ll cost = 0;
+		F0R(i, edges_count) {			
+			pair<ll, pl> edge = edges[i];
+			ll l = edge.s.f;
+			ll r = edge.s.s;
+			if (!d.same(l, r)) {
+				cost += edge.f;
+				d.merge(l, r);
+				step++;
+			}
+			if (step == members-1) {
+				break;
+			}
+		}
+		if (step != members-1) {
+			continue;
+		}
+		// ps("cost for", k, "is", cost);
+		min_cost = min(min_cost, cost);
+	}
+	ps(min_cost);
 	// you should actually read the stuff at the bottom
 }
 

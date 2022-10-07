@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,8 +273,68 @@ vi readIntArr() {
 
 int main() {
 	setIO();
+	ll n, k; re(n, k);
+	vector<pl> arr(n);
+	vl values(n);
+	F0R(i, n) {
+		ll tmp; re(tmp); arr[i] = mp(tmp, i);
+		values[i] = tmp;
+	}
+	sor(arr);
+	vector<pl> sorted{rall(arr)};
+	// ps(sorted);
 	
-	// you should actually read the stuff at the bottom
+	ll included = n;
+	ll layers_eaten = 0;
+	// we can eliminate one by one
+	while(k >= included * (sorted[included-1].f - layers_eaten)) {
+		k -= included * (sorted[included-1].f - layers_eaten);
+		values[sorted[included-1].s] = 0;
+		layers_eaten = sorted[included-1].f;
+		included--;
+	}
+	// ps(included);
+	/* tc
+		5
+		5 4 3 2 1
+		k = 5 -> eat one
+		k = 9 -> eat two layer
+		k = 8 -> eat one layer
+	*/
+
+	layers_eaten += k / included;
+	F0R(i, included) {
+		values[sorted[i].s] = sorted[i].f - layers_eaten;
+	}
+
+
+	k = k % included;
+	F0R(i, n) {
+		if (k > 0 && values[i] > 0) {
+			values[i]--;
+			k--;
+		}
+		if (k == 0) {
+			break;
+		}
+	}
+	
+	F0R(i, n) {
+		cout << values[i] << " ";
+	}
+	cout << endl;
+
+
+	// put them in a circle, and remove whole layers
+	// ll layers_to_eat = k / included;
+	// ll remaining_to_eat = k % included;
+	// vl remains;
+	// F0R(i, n) {
+	// 	if (i < included) {
+	// 		remains.pb()
+	// 	}
+	// }
+	// // you should actually read the stuff at the bottom
 }
 
 /* stuff you should look for

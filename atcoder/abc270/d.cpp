@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,8 +273,31 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
-	// you should actually read the stuff at the bottom
+	int n, k; re(n, k);
+	vi arr(k);
+	F0R(i, k) {
+		int tmp; re(tmp); arr[i] = tmp;
+	}
+	vector<pi> gain(n+1);
+	gain[0] = mp(0, 0);
+	gain[1] = mp(1, 0);
+	FOR(i, 2, n+1) {
+		// start first
+		int start_first_max = -1;
+		int chosen_action = -1;
+		F0R(j, k) {
+			if (i - arr[j] < 0) continue;
+			if (arr[j] + gain[i-arr[j]].s > start_first_max) {
+				start_first_max = arr[j] + gain[i-arr[j]].s;
+				chosen_action = j;
+			}
+		}
+
+		int start_second = gain[i-arr[chosen_action]].f;
+		gain[i] = mp(start_first_max, start_second);
+	}
+	ps(gain[n].f);
+	// y read the stuff at the bottom
 }
 
 /* stuff you should look for

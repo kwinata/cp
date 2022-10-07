@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -274,10 +271,64 @@ vi readIntArr() {
 	return arr;
 }
 
+ll posmod(ll x, ll m) {
+	return (x % m + m) % m;
+}
+
 int main() {
 	setIO();
-	
-	// you should actually read the stuff at the bottom
+	int n; re(n);
+	vi arr(n, 0);
+	F0R(i, n) {
+		int tmp;re(tmp);
+		tmp -= i;
+		if (tmp < 0) {
+			tmp+=n;
+		}
+		arr[tmp]++;
+	}
+	// ps(arr);
+
+	vl sum_range(n+1);
+	sum_range[0] = 0;
+	ll cur_sum = 0;
+	F0R(i, n) {
+		cur_sum += arr[i];
+		sum_range[i+1] = cur_sum;
+	}
+	// ps(sum_range);
+
+	vl last_half(n, 0);
+	F0R(i, n) {
+		ll head = sum_range[i+1];
+		ll before_idx = posmod(i-(n/2)+1, n);
+		ll before = sum_range[before_idx];
+		if (before > head) {
+			before -= sum_range[n];
+		}
+		last_half[i] = head-before;
+		// ps(head, before_idx, sum_range[before_idx], before);
+	}
+	// ps(last_half);
+
+	ll frust = 0;
+	FOR(j, 1, ((n-1)/2) + 1) {
+		frust += arr[posmod(0-j, n)]*j;
+	}
+	FOR(j, 1, (n/2) + 1) {
+		frust += arr[posmod(0+j, n)] * j;
+	}
+
+	ll min_frust = frust;
+	// ps(frust);
+	FOR(i, 1, n) {
+		frust += last_half[posmod(i-1, n)];
+		frust -= last_half[posmod(i+((n+1)/2), n)];
+		// ps(frust, last_half[posmod(i-1, n)], last_half[posmod(i+(n/2)-1, n)]);
+		min_frust = min(min_frust, frust);
+	}
+	ps(min_frust);
+	// // you should actually read the stuff at the bottom
 }
 
 /* stuff you should look for

@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -257,6 +254,19 @@ inline namespace FileIO {
 	}
 }
 
+// inline namespace FileIO {
+// 	void setIn(str s)  { freopen(s.c_str(),"r",stdin); }
+// 	void setOut(str s) { freopen(s.c_str(),"w",stdout); }
+// 	void setIO(str s = "") {
+// 		cin.tie(0)->sync_with_stdio(0); // unsync C / C++ I/O streams
+// 		// cin.exceptions(cin.failbit);
+// 		// throws exception when do smth illegal
+// 		// ex. try to read letter into int
+// 		if (sz(s)) setIn(s+".in"), setOut(s+".out"); // for old USACO
+// 	}
+// }
+
+
 ll maxll(ll a, ll b) {
 	if (a >= b) {
 		return a;
@@ -274,11 +284,191 @@ vi readIntArr() {
 	return arr;
 }
 
+
+
+set<ll> from[int(2e5+2)];
+set<ll> into[int(2e5+2)];
+set<ll> city_conns[int(2e5+2)];
+pl edges[int(5e5+5)];
+ll city_alive;
+bool blackedout[int(2e5+2)];
+
+void breaklink(ll u, ll v) {
+	into[v].erase(u); from[u].erase(v);
+	into[u].erase(v); from[v].erase(u);
+}
+
+void blackout(ll cur) {
+	if (blackedout[cur]) {
+		return;
+	}
+	city_alive--;
+	vector<ll> blackouts;
+	for (auto depending: from[cur]) {
+		if(into[depending].size() == 1) {
+			// depending will die also
+			blackouts.pb(depending);
+		}
+	}
+	for(auto victim: blackouts) {
+		from[cur].erase(victim); into[victim].erase(cur);
+	}
+	blackedout[cur] = true;
+	for(auto victim: blackouts) {
+		blackout(victim);
+	}
+}
+void print_setvec(set<ll>* arr, ll n) {
+	vector<set<ll>> s;
+	F0R(i, n) {
+		s.pb(arr[i]);
+	}
+	ps(s);
+}
+
 int main() {
 	setIO();
+	// setIO("e");
+	ll n, m, e; re(n, m, e);
+	F0R(i, n) {
+		set<ll> a;
+		set<ll> b;
+		set<ll> c;
+		from[i] = a; into[i] = b; city_conns[i] = c;
+	}
+	F0R(i, e) {
+		ll u, v; re(u, v);
+		u--; v--;
+		if (u > v) {
+			ll tmp = u;
+			u = v;
+			v = tmp;
+		}
+		edges[i] = mp(u, v);
+		if (u == v) {
+			continue;
+		}
+		if (u < n && v < n) {
+			city_conns[u].insert(v);
+			city_conns[v].insert(u);
+			continue;
+		} else if (u < n) {
+			into[u].insert(-(i+1));
+		}
+		// else, both of them are bigger than n, which can be ignored
+	}
 	
+
+	vector<bool> visited(n, false);
+	F0R(i, n) {
+		// see if this city has any power
+		if (into[i].size() == 0) {
+			continue;
+		}
+
+		// skip if visited
+		if (visited[i]) {
+			continue;
+		}
+
+		// bfs the power from city i
+		vector<ll> st;
+		st.pb(i);
+		while(st.size()) {
+			ll cur = st.back(); st.pop_back();
+			if (visited[cur]) {
+				continue;
+			}
+			visited[cur] = true;
+			for(auto to_be_lended: city_conns[cur]) {
+				if (!visited[to_be_lended]) {
+					st.pb(to_be_lended);
+				}
+				into[to_be_lended].insert(cur);
+				from[cur].insert(to_be_lended);
+			}
+		}
+	}
+	
+	city_alive = 0;
+	F0R(i, n) {
+		city_alive += (into[i].size() > 0);
+	}
+
+	ll q; re(q);
+	F0R(qidx, q) {
+		
+		if (qidx != 0) {
+			ps(city_alive);
+		}
+		ll x; re(x);
+		ll u, v;
+		u = edges[x-1].f;
+		v = edges[x-1].s;
+		print_setvec(into, n); print_setvec(from, n);
+		// ps(into); ps(from);
+		ps("breaking", u, v, -x);
+
+		if (u >= n) {
+			// ps("It's power-power");
+			continue; // power to power can be ignored
+		} else if (u < n && v < n) {
+			if (into[u].size() == 0 || into[v].size() == 0) {
+				breaklink(u, v);
+				continue; // if one of them is already dead, no need to care
+			}
+			// when u depends solely on v. U blackout
+			else if (into[u].size() == 1) {
+				breaklink(u, v);
+				blackout(u);
+				continue;
+			}
+			// when v depends solely on u. V blackout
+			else if (into[v].size() == 1) {
+				breaklink(u, v);
+				blackout(v);
+				continue;
+			} else {
+				breaklink(u, v);
+				continue;
+			}
+			// otherwise no one will die, just break the connection
+		}
+		else if (u < n && v >= n) {
+			if (into[u].count(-x) != 1) {
+				ps("-x is not in into u?", u, -x);
+				ps(into, n);
+				ps(from, n);
+				return 0;
+			}
+
+			if (into[u].size() == 1) {
+				into[u].erase(-x);
+				blackout(u);
+			} else {				
+				into[u].erase(-x);
+				
+				// off load the deps of u
+				ll offloader = *into[u].begin();
+				if (offloader >= 0) { // no longer connected to a power grid
+					// migrating all the deps to the source
+					for (auto deps: from[u]) {
+						from[offloader].insert(deps); into[deps].erase(u);
+					}
+					from[u].clear();
+				}
+			}
+		} else {
+			ps("FATAL else", u, v); return 0;
+		}
+	}
+	// ps("final:");
+	// ps(into, n);
+	// ps(from, n);
+	ps(city_alive);
 	// you should actually read the stuff at the bottom
 }
+
 
 /* stuff you should look for
 	* int overflow, array bounds

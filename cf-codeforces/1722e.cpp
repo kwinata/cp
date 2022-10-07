@@ -276,9 +276,8 @@ vi readIntArr() {
 
 const int N = 1000;
 
-ll smaller[N+1][N+1] = {0};
-
 void solve() {
+	ll smaller[N+1][N+1] = {0};
 	int n, q; re(n, q);
 	F0R(i, n) {
 		int h, w; re(h, w);
@@ -290,6 +289,7 @@ void solve() {
 	// 	ps(row);
 	// }
 	// ps();
+
 	F0R(depth, 2*(N+1)) {
 		F0R(i, N+1) {
 			int x = i;
@@ -315,7 +315,8 @@ void solve() {
 	// }
 	F0R(i, q) {
 		int hs, ws, hb, wb; re(hs, ws, hb, wb);
-		if (hb == 0 || wb == 0) {
+		if (hb == 0 || wb == 0 || hb > N+1 || wb > N+1) {
+			ps(0);
 			continue;
 		}
 		// ps(smaller[hb-1][wb-1], smaller[hs][wb-1], smaller[hb-1][ws], smaller[hs][ws]);

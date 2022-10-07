@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,7 +273,41 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	str s; re(s);
+	if (s == "atcoder") {
+		ps(0);
+		return 0;
+	}
+	map<str, ll> step;
+	step["atcoder"] = 0;
+	F0R(iteration, 1000) {
+		map<str, ll> generated;
+		for (auto p: step) {
+			F0R(i, 6) {
+				str swapped = p.f;
+				char tmp = swapped[i];
+				swapped[i] = swapped[i+1];
+				swapped[i+1] = tmp;
+				if (generated.count(swapped)) {
+					generated[swapped] = min(generated[swapped], p.s+1);
+				} else {
+					generated[swapped] = p.s + 1;
+				}
+			}
+		}
+		if (generated.count(s)) {
+			ps(generated[s]);
+			return 0;
+		}
+		for (auto p: generated) {
+			if (step.count(p.f)) {
+				step[p.f] = min(step[p.f], generated[p.f]);
+			} else {
+				step[p.f] = generated[p.f];
+			}
+		}
+	}
+	ps(-1);
 	// you should actually read the stuff at the bottom
 }
 

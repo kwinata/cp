@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -274,9 +271,84 @@ vi readIntArr() {
 	return arr;
 }
 
+ll s(ll x, ll y, ll m) {
+	return (x-1)*m + y;
+}
+ll s1(ll x, ll m) {
+	return (x-1)*m;
+}
+ll s2(ll y) {
+	return y;
+}
+ll count(ll l, ll r) {
+	return (r-l+1);
+}
+ll artSum(ll l, ll r, ll c) {
+	return (l+r)*c/2;
+}
 int main() {
 	setIO();
-	
+	ll n, m, q;
+	re(n, m, q);
+	F0R(q_idx, q) {
+		ll a, b, c, d; re(a, b, c, d);
+		ll total = 0;
+		if (m & 1) {
+			// m is odd
+			ll top_corner = s(a, c, m);
+			bool is_top_corner_odd = top_corner & 1;
+
+			// calc s1
+			ll completeRow = artSum(s1(a, m), s1(b, m), count(a, b));
+			bool rowLengthIsOdd = count(a, b) & 1;
+			ll offsetRow = artSum(s1(a+1, m), s1(b-rowLengthIsOdd, m) , count(a, b)/2);
+			ll nonOffsetRow = completeRow - offsetRow;
+			ll sum_s1 = completeRow * ((count(c, d)+1)/2);
+			if (is_top_corner_odd) {
+				sum_s1 -= nonOffsetRow;
+			} else {
+				sum_s1 -= offsetRow;
+			}
+			total += sum_s1;
+
+		} else {
+			ll top_corner = s(a, c, m);
+			bool is_top_corner_odd = top_corner & 1;
+			ll completeRow = artSum(s1(a, m), s1(b, m), count(a, b));
+			ll sum_s1 = completeRow * ((count(c, d)+1)/2);
+			if (is_top_corner_odd) {
+				sum_s1 -= completeRow;
+			}
+			total += sum_s1;
+		}
+		if ((m & 1) == 0) {
+			ll top_corner = s(a, c, m);
+			bool is_top_corner_odd = top_corner & 1;
+			// calc s2
+			ll completeRow = artSum(s2(a), s2(b), count(a, b));
+			bool rowLengthIsOdd = count(a, b) & 1;
+			ll offsetRow = artSum(s2(a+1), s2(b-rowLengthIsOdd) , count(a, b)/2);
+			ll nonOffsetRow = completeRow - offsetRow;
+			ll sum_s2 = completeRow * ((count(c, d)+1)/2);
+			if (is_top_corner_odd) {
+				sum_s2 -= nonOffsetRow;
+			} else {
+				sum_s2 -= offsetRow;
+			}
+			total += sum_s2;
+		} else {
+			ll top_corner = s(a, c, m);
+			bool is_top_corner_odd = top_corner & 1;
+			ll completeRow = artSum(s2(a), s2(b), count(a, b));
+			ll sum_s2 = completeRow * ((count(c, d)+1)/2);
+			if (is_top_corner_odd) {
+				sum_s2 -= completeRow;
+			}
+			total += sum_s2;
+		}
+		ps(total);
+
+	}
 	// you should actually read the stuff at the bottom
 }
 

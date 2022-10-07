@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,7 +273,23 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	int n, m; re(n, m);
+	vector<string> arr;
+	F0R(i, n) {
+		str tmp; re(tmp);
+		arr.pb(tmp);
+	}
+	vector<string> t_vec;
+	F0R(i, m) {
+		str tmp; re(tmp);
+		t_vec.pb(tmp);
+	}
+	set<string> t{all(t_vec)};
+
+	// try reduced version matching, should take O(40k log n)
+	// if got any not match, return that
+
+	// choose a random one, if not matched
 	// you should actually read the stuff at the bottom
 }
 

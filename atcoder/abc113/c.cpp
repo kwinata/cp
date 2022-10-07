@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,7 +273,32 @@ vi readIntArr() {
 
 int main() {
 	setIO();
+	int n, m; re(n, m);
+	vector<pi> query;
+	vector<map<int, int>> prefs(n);
+	F0R(i, m) {
+		int pref, city; 
+		re(pref, city);
+		pref--;
+		query.pb(mp(pref, city));
+		prefs[pref][city] = 0;
+	}
 	
+	// sort cities
+	F0R(i, n) {
+		int ord = 1;
+		for(auto c: prefs[i]) {
+			prefs[i][c.f] = ord++;
+		}
+	}
+
+	// output
+	F0R(i, m) {
+		int pref = query[i].f;
+		int city = query[i].s;
+		cout << setw(6) << setfill('0') << pref+1;
+		cout << setw(6) << setfill('0') << prefs[pref][city] << endl;
+	}
 	// you should actually read the stuff at the bottom
 }
 

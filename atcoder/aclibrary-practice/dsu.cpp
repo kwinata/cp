@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
+#include <atcoder/dsu>
 
 using namespace std;
 using namespace atcoder;
@@ -276,7 +276,18 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	int n, q; re(n, q);
+	dsu d(n);
+	F0R(i, q) {
+		int t, u, v; re(t, u, v);
+		if (t == 0) {
+			d.merge(u, v);
+		} else if (d.same(u, v)) {
+			ps(1);
+		} else {
+			ps(0);
+		}
+	}
 	// you should actually read the stuff at the bottom
 }
 

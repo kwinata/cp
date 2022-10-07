@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,6 +273,41 @@ vi readIntArr() {
 
 int main() {
 	setIO();
+	int n, x, y; re(n, x, y);
+	x--; y--;
+	vector<set<int>> neibs(n);
+	F0R(i, n-1) {
+		int u, v; re(u, v); u--; v--;
+		neibs[u].insert(v);
+		neibs[v].insert(u);
+	}
+	vector<int> parent(n);
+	vi st;
+	st.pb(x);
+	set<int> visited;
+	while(st.size()) {
+		int cur = st.back(); st.pop_back();
+		if (cur == y) {
+			break;
+		}
+		visited.insert(cur);
+		for(auto n: neibs[cur]) {
+			if (visited.count(n)) continue;
+			st.pb(n);
+			parent[n] = cur;
+		}
+	}
+	vi hist;
+	int cur = y;
+	while (cur != x) {
+		hist.pb(cur);
+		cur = parent[cur];
+	}
+	hist.pb(cur);
+	R0F(i, hist.size()) {
+		cout << hist[i]+1 << ' ';
+	}
+	cout << endl;
 	
 	// you should actually read the stuff at the bottom
 }

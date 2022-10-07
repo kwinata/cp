@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,7 +273,60 @@ vi readIntArr() {
 
 int main() {
 	setIO();
-	
+	int n; re(n);
+	map<pi, set<pi>> blacks;
+	vector<pi> offsets;
+	offsets.pb(mp(-1, -1));
+	offsets.pb(mp(-1, 0));
+	offsets.pb(mp(0, -1));
+	offsets.pb(mp(0, 1));
+	offsets.pb(mp(1, 0));
+	offsets.pb(mp(1, 1));
+	F0R(i, n) {
+		int x, y; re(x, y);
+		set<pi> e;
+		blacks[mp(x, y)] = e;
+	}
+	for (auto black: blacks) {
+		pi cur = black.f;
+		for (auto offset: offsets) {
+			int x = cur.f + offset.f;
+			int y = cur.s + offset.s;
+			if (blacks.count(mp(x, y))) {
+				blacks[cur].insert(mp(x, y));
+			}
+		}
+	}
+
+	set<pi> visited;
+	vector<pi> st;
+	int comps = 0;
+	for (auto black: blacks) {
+		set<pi> reachable;
+		pi cur = black.f;
+		if (visited.count(cur)) {
+			continue;
+		}
+		comps++;
+		st.pb(cur);
+		reachable.insert(cur);
+		while (st.size()) {
+			pi curNode = st.back();
+			st.pop_back();
+			reachable.insert(curNode);
+			for (auto neigh: blacks[curNode]) {
+				if (reachable.count(neigh)) {
+					continue;
+				}
+				st.pb(neigh);
+				reachable.insert(neigh);
+			}
+		}
+		for (auto reached: reachable) {
+			visited.insert(reached);
+		}
+	}
+	ps(comps);
 	// you should actually read the stuff at the bottom
 }
 

@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include <atcoder/all>
-
 using namespace std;
-using namespace atcoder;
  
 using ll = long long;
 using db = long double; // or double, if TL is tight
@@ -276,6 +273,40 @@ vi readIntArr() {
 
 int main() {
 	setIO();
+	int n; re(n);
+	vector<map<int, ll>> adj(n);
+	F0R(i, n) {
+		map<int, ll> tmp; adj[i] = tmp;
+	}
+	F0R(i, n-1) {
+		int a, b; ll c; re(a, b, c);
+		a--; b--;
+
+		adj[a][b] = c;
+		adj[b][a] = c;
+	}
+
+	int q, k; re(q, k);
+	vector<ll> dist(n);
+	dist[k-1] = 0;
+	vector<bool> visited(n, false);
+	vector<int> st = {k-1};
+	while(st.size()) {
+		int cur = st.back(); st.pop_back();
+		visited[cur] = true;
+		for (auto neib: adj[cur]) {
+			if (visited[neib.f]) {
+				continue;
+			}
+			dist[neib.f] = dist[cur] + neib.s;
+			st.pb(neib.f);
+		}
+	}
+
+	F0R(i, q) {
+		int x, y; re(x, y); x--; y--;
+		ps(dist[x] + dist[y]);
+	}
 	
 	// you should actually read the stuff at the bottom
 }
