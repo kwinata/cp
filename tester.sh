@@ -54,7 +54,7 @@ runtest() {
     filext=$3
 
     commandexec="${runner}"
-    progfile="${problem}.${filext}"
+    progfile="${problem}${filext}"
     for i in {1..20}
     do
         infile="${problem}_${i}.in"
@@ -70,7 +70,7 @@ runtest() {
             error_code=$?  # get diff command exit code            
             if [[ $error_code != 0 ]]; then 
                 echo "\n!!! Output differs:\n"
-                diff $outfile $outtmp
+                diff -B $outfile $outtmp
 
                 echo "\nFull file:"
                 echo "-----\nExpected: (${outfile})"

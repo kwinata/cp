@@ -1,0 +1,5 @@
+n = int(input())
+arr = list(map(int,input().split()))
+arr_i = list(range(n))
+arr_i.sort(key=lambda x: arr[x])
+print(arr_i[-1]+1)

@@ -1,0 +1,14 @@
+tanaka taro
+tanaka jiro
+suzuki hanako
+
+
+# after first pass
+{
+	tanaka: 2
+	taro: 1
+	jiro: 1
+	suzuki: 1
+	hanako: 1
+}
+
